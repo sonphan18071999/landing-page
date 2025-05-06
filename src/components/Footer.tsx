@@ -10,37 +10,37 @@ const Footer: React.FC = () => {
       <Container maxW="7xl">
         <SimpleGrid columns={{ base: 1, md: 4 }} gap={8}>
           <Flex direction="column" gap={4}>
-            <Heading size="md">Company</Heading>
+            <Heading size="md">{t('company')}</Heading>
             <Link href="/about">{t('about')}</Link>
             <Link href="/careers">{t('careers')}</Link>
             <Link href="/contact">{t('contact')}</Link>
           </Flex>
           <Flex direction="column" gap={4}>
-            <Heading size="md">Support</Heading>
+            <Heading size="md">{t('support')}</Heading>
             <Link href="/help">{t('helpCenter')}</Link>
             <Link href="/faq">{t('faq')}</Link>
             <Link href="/support">{t('support')}</Link>
           </Flex>
           <Flex direction="column" gap={4}>
-            <Heading size="md">Legal</Heading>
+            <Heading size="md">{t('legal')}</Heading>
             <Link href="/privacy">{t('privacyPolicy')}</Link>
             <Link href="/terms">{t('termsOfService')}</Link>
             <Link href="/cookies">{t('cookiePolicy')}</Link>
           </Flex>
           <Flex direction="column" gap={4}>
-            <Heading size="md">Social</Heading>
+            <Heading size="md">{t('social')}</Heading>
             <Flex direction="column" gap={2}>
               <Button as="a" href="https://twitter.com" variant="ghost" justifyContent="flex-start" px={2}>
-                Twitter
+                {t('twitter')}
               </Button>
               <Button as="a" href="https://facebook.com" variant="ghost" justifyContent="flex-start" px={2}>
-                Facebook
+                {t('facebook')}
               </Button>
               <Button as="a" href="https://instagram.com" variant="ghost" justifyContent="flex-start" px={2}>
-                Instagram
+                {t('instagram')}
               </Button>
               <Button as="a" href="https://linkedin.com" variant="ghost" justifyContent="flex-start" px={2}>
-                LinkedIn
+                {t('linkedin')}
               </Button>
             </Flex>
           </Flex>

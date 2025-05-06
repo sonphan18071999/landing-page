@@ -1,9 +1,20 @@
 import React from 'react';
 import { Box, Container, Heading, Text, SimpleGrid, Flex } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { motion, useScroll, useTransform } from 'framer-motion';
+
+const MotionBox = motion(Box);
+const MotionHeading = motion(Heading);
+const MotionText = motion(Text);
+const MotionFlex = motion(Flex);
+const MotionSimpleGrid = motion(SimpleGrid);
 
 const About: React.FC = () => {
   const { t } = useTranslation();
+  const { scrollYProgress } = useScroll();
+  
+  const opacity = useTransform(scrollYProgress, [0.1, 0.2], [0, 1]);
+  const y = useTransform(scrollYProgress, [0.1, 0.2], [50, 0]);
 
   const features = [
     {
@@ -20,18 +31,89 @@ const About: React.FC = () => {
     },
   ];
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        when: "beforeChildren",
+        staggerChildren: 0.2,
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        damping: 12,
+        stiffness: 100
+      }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.1,
+        type: "spring",
+        damping: 15,
+        stiffness: 100
+      }
+    })
+  };
+
   return (
-    <Box py={20}>
+    <MotionBox 
+      py={20}
+      style={{ opacity, y }}
+    >
       <Container maxW="7xl">
-        <Flex direction="column" align="center" textAlign="center" gap={8} mb={12}>
-          <Heading size="xl">{t('aboutTitle')}</Heading>
-          <Text color="gray.600" fontSize="lg" maxW="2xl">
+        <MotionFlex 
+          direction="column" 
+          align="center" 
+          textAlign="center" 
+          gap={8} 
+          mb={12}
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+        >
+          <MotionHeading 
+            size="xl"
+            variants={itemVariants}
+            bgGradient="linear(to-r, blue.400, teal.400)"
+            bgClip="text"
+          >
+            {t('aboutTitle')}
+          </MotionHeading>
+          <MotionText 
+            color="gray.600" 
+            fontSize="lg" 
+            maxW="2xl"
+            variants={itemVariants}
+          >
             {t('aboutSubtitle')}
-          </Text>
-        </Flex>
-        <SimpleGrid columns={{ base: 1, md: 3 }} gap={10}>
+          </MotionText>
+        </MotionFlex>
+        <MotionSimpleGrid 
+          columns={{ base: 1, md: 3 }} 
+          gap={10}
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+        >
           {features.map((feature, index) => (
-            <Flex
+            <MotionFlex
               key={index}
               direction="column"
               align="center"
@@ -40,16 +122,40 @@ const About: React.FC = () => {
               bg="white"
               rounded="lg"
               shadow="md"
+              custom={index}
+              variants={cardVariants}
+              whileHover={{ 
+                y: -10, 
+                boxShadow: "xl", 
+                transition: { duration: 0.2 } 
+              }}
             >
-              <Heading size="md" mb={4}>
+              <MotionHeading 
+                size="md" 
+                mb={4}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  delay: 0.2 + index * 0.1,
+                  type: "spring",
+                  damping: 12
+                }}
+              >
                 {feature.title}
-              </Heading>
-              <Text color="gray.600">{feature.description}</Text>
-            </Flex>
+              </MotionHeading>
+              <MotionText 
+                color="gray.600"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 + index * 0.1 }}
+              >
+                {feature.description}
+              </MotionText>
+            </MotionFlex>
           ))}
-        </SimpleGrid>
+        </MotionSimpleGrid>
       </Container>
-    </Box>
+    </MotionBox>
   );
 };
 
